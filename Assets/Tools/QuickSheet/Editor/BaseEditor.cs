@@ -21,6 +21,7 @@ namespace UnityQuickSheet
         protected SerializedObject targetObject;
         protected SerializedProperty spreadsheetProp;
         protected SerializedProperty worksheetProp;
+        protected SerializedProperty keyListStrProp;
         protected SerializedProperty serializedData;
 
         protected GUIStyle box;
@@ -42,6 +43,10 @@ namespace UnityQuickSheet
             worksheetProp = targetObject.FindProperty("WorksheetName");
             if (worksheetProp == null)
                 Debug.LogError("Failed to find 'WorksheetName' property.");
+            
+            keyListStrProp = targetObject.FindProperty("KeyListStr");
+            if (keyListStrProp == null)
+                Debug.LogError("Failed to find 'KeyListStr' property.");
 
             serializedData = targetObject.FindProperty("dataArray");
             if (serializedData == null)
@@ -70,6 +75,7 @@ namespace UnityQuickSheet
             // Draw 'spreadsheet' and 'worksheet' name.
             EditorGUILayout.TextField(spreadsheetProp.name, spreadsheetProp.stringValue);
             EditorGUILayout.TextField(worksheetProp.name, worksheetProp.stringValue);
+            EditorGUILayout.TextField(keyListStrProp.name, keyListStrProp.stringValue);
 
             // Draw properties of the data class.
             if (useGUIStyle && !isGUISkinInitialized)

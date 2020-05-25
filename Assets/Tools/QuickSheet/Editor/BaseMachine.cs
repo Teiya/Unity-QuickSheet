@@ -22,6 +22,7 @@ namespace UnityQuickSheet
         public string name;
         public bool isEnable;
         public bool isArray;
+        public bool isKey;
         public ColumnHeader nextArrayItem;
 
         // used to order columns by ascending. (only need on excel-plugin)
@@ -63,6 +64,13 @@ namespace UnityQuickSheet
         {
             get { return editorScriptFilePath; }
             set { editorScriptFilePath = value; }
+        }
+
+        private string editorDatabaseFilePath;
+        public string EditorDatabase
+        {
+            get { return editorDatabaseFilePath; }
+            set { editorDatabaseFilePath = value; }
         }
 
         [SerializeField]
@@ -123,6 +131,8 @@ namespace UnityQuickSheet
                 RuntimeClassPath = DEFAULT_CLASS_PATH;
             if (string.IsNullOrEmpty(EditorClassPath))
                 EditorClassPath = DEFAULT_EDITOR_PATH;
+            if (string.IsNullOrEmpty(EditorDatabase))
+                EditorDatabase = DEFAULT_EDITOR_PATH;
 
             // reinitialize. it does not need to be serialized.
             onlyCreateDataClass = false;

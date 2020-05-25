@@ -21,7 +21,7 @@ namespace UnityQuickSheet
         /// <summary>
         /// A default path where .txt template files are.
         /// </summary>
-        public string TemplatePath = "QuickSheet/ExcelPlugin/Templates";
+        public string TemplatePath = "Tools/QuickSheet/ExcelPlugin/Templates";
 
         /// <summary>
         /// A path where generated ScriptableObject derived class and its data class script files are to be put.
@@ -32,6 +32,11 @@ namespace UnityQuickSheet
         /// A path where generated editor script files are to be put.
         /// </summary>
         public string EditorPath = string.Empty;
+
+        /// <summary>
+        /// A path where generated editor database files are to be put.
+        /// </summary>
+        public string EditorDatabasePath = string.Empty;
 
         /// <summary>
         /// Select currently exist account setting asset file.

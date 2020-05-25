@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8febdf54eb1f74fa718a81e66c7069, type: 3}
+  m_Name: skilldata
+  m_EditorClassIdentifier: 
+  SheetName: Assets/design/skill.xlsx
+  WorksheetName: skilldata
+  KeyListStr: id$hitLevel
+  dataArray:
+  - _id: 1001
+    _hitlevel: 1
+    _cooldown: 0
+    _targetselect: 1
+    _posselect: 0
+    _selectrange: 0
+    _affectcamp: 1
+    _acttype: 1
+    _actno: 1
+    _desc: blabla
+    _power: 10
+    _hiteffect: JMO Assets/Cartoon FX/CFX2 Prefabs/Electric/CFX2_SparksHit
+    _buffid: 1
+    _bufflevel: 1
+    _buffduration: 10
+  - _id: 1002
+    _hitlevel: 1
+    _cooldown: 0
+    _targetselect: 1
+    _posselect: 0
+    _selectrange: 0
+    _affectcamp: 1
+    _acttype: 2
+    _actno: 1
+    _desc: blabla
+    _power: 10
+    _hiteffect: JMO Assets/Cartoon FX/CFX2 Prefabs/Electric/CFX2_SparksHit
+    _buffid: 0
+    _bufflevel: 0
+    _buffduration: 0
+  - _id: 1003
+    _hitlevel: 1
+    _cooldown: 10
+    _targetselect: 1
+    _posselect: 1
+    _selectrange: 6
+    _affectcamp: 1
+    _acttype: 3
+    _actno: 1
+    _desc: blabla
+    _power: 10
+    _hiteffect: JMO Assets/Cartoon FX/CFX2 Prefabs/Electric/CFX2_SparksHit
+    _buffid: 0
+    _bufflevel: 0
+    _buffduration: 0

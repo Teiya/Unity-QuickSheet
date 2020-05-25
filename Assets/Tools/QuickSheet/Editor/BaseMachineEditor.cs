@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 ///
 /// BaseMachineEditor.cs
 /// 
@@ -196,7 +196,7 @@ namespace UnityQuickSheet
             }
 
             List<MemberFieldData> fieldList = new List<MemberFieldData>();
-
+            string keyListStr = "";
             //FIXME: replace ValueType to CellType and support Enum type.
             foreach (ColumnHeader header in machine.ColumnHeaderList)
             {
@@ -204,12 +204,24 @@ namespace UnityQuickSheet
                 member.Name = header.name;
                 member.type = header.type;
                 member.IsArrayType = header.isArray;
-
+                member.IsKey = header.isKey;
+                if(member.IsKey)
+                    keyListStr += member.Name + "$";
                 fieldList.Add(member);
+            }
+            if(keyListStr == "")
+            {
+                Debug.Log(machine.ColumnHeaderList);
+                keyListStr = machine.ColumnHeaderList[0].name;
+            }
+            else if (keyListStr.EndsWith("$"))
+            {
+                keyListStr = keyListStr.Substring(0, keyListStr.Length-1);
             }
 
             sp.className = machine.WorkSheetName + "Data";
             sp.template = GetTemplate("DataClass");
+            sp.keyListStr = keyListStr;
 
             sp.memberFields = fieldList.ToArray();
 
@@ -314,8 +326,8 @@ namespace UnityQuickSheet
                 {
                     GUILayout.Label("Member", GUILayout.MinWidth(MEMBER_WIDTH));
                     GUILayout.FlexibleSpace();
-                    string[] names = { "Type", "Array" };
-                    int[] widths = { 55, 40 };
+                    string[] names = { "Type", "Key", "Array" };
+                    int[] widths = { 50, 30, 40};
                     for (int i = 0; i < names.Length; i++)
                     {
                         GUILayout.Label(new GUIContent(names[i]), GUILayout.Width(widths[i]));
@@ -336,6 +348,10 @@ namespace UnityQuickSheet
                         // specify type with enum-popup
                         header.type = (CellType)EditorGUILayout.EnumPopup(header.type, GUILayout.Width(60));
                         GUILayout.Space(20);
+
+                        // array toggle
+                        header.isKey = EditorGUILayout.Toggle(header.isKey, GUILayout.Width(20));
+                        GUILayout.Space(10);
 
                         // array toggle
                         header.isArray = EditorGUILayout.Toggle(header.isArray, GUILayout.Width(20));
@@ -390,10 +406,26 @@ namespace UnityQuickSheet
                 string strType = cHeader.Substring(startIndex, length).ToLower();
                 ctype = (CellType)Enum.Parse(typeof(CellType), strType, true);
 
-                return new ColumnHeader { name = substr, type = ctype, isArray = bArray, OrderNO = order };
+                return new ColumnHeader { name = substr, type = ctype, isKey = false, isArray = bArray, OrderNO = order };
             }
 
             return new ColumnHeader { name = cHeader, type = CellType.Undefined, OrderNO = order };
         }
+
+        protected ColumnHeader ParseColumnHeader(string columnheader, string titleType, int order)
+        {
+            // remove all white space. e.g.) "SkillLevel | uint"
+            string cHeader = new string(titleType.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+
+            CellType ctype = CellType.Undefined;
+            bool bArray = cHeader.Contains("!") ;
+            bool bKey = cHeader.Contains("$");
+
+            string strType = new string(titleType.ToCharArray().Where(c => c!='|' && c!='$' && c!='!').ToArray());
+            ctype = (CellType)Enum.Parse(typeof(CellType), strType, true);
+
+            return new ColumnHeader { name = columnheader, type = ctype, isKey = bKey, isArray = bArray, OrderNO = order };
+        }
+
     }
 }

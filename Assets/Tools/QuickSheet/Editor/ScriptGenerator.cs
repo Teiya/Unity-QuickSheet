@@ -122,6 +122,16 @@ namespace UnityQuickSheet
                 return "Error_Empty_AssetPostprocessorClass";
             }
         }
+
+        private string KeyListStr
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(m_ScriptPrescription.keyListStr))
+                    return m_ScriptPrescription.keyListStr;
+                return "Error_Empty_keyListStr";
+            }
+        }
         
         /// <summary>
         /// Constructor.
@@ -149,6 +159,8 @@ namespace UnityQuickSheet
             m_Text = m_Text.Replace ("$WorkSheetClassName", WorkSheetClassName);
             m_Text = m_Text.Replace ("$DataClassName", DataClassName);
             m_Text = m_Text.Replace ("$AssetFileCreateFuncName", AssetFileCreateFuncName);
+            m_Text = m_Text.Replace ("$KEY_LIST_STR", KeyListStr);
+
 
             m_Text = m_Text.Replace ("$AssetPostprocessorClass", AssetPostprocessorClass);
             m_Text = m_Text.Replace ("$IMPORT_PATH", ImportedFilePath);
@@ -175,7 +187,6 @@ namespace UnityQuickSheet
                     m_Text = m_Text.Replace (match.Value + "\n", m_Writer.ToString ());
                 }
             }
-            
             // Return the text of the script
             return m_Text;
         }
@@ -232,6 +243,7 @@ namespace UnityQuickSheet
 
             tmp += "{ get {return " + fieldName + "; } set { this." + fieldName + " = value;} }";
 
+
             m_Writer.WriteLine (m_Indentation + tmp);
         }
 
@@ -240,7 +252,7 @@ namespace UnityQuickSheet
         /// </summary>
         protected virtual string GetFieldNameForField(MemberFieldData field)
         {
-            return field.Name.ToLower();
+            return "_"+field.Name.ToLower();
         }
 
         /// <summary>
@@ -248,12 +260,14 @@ namespace UnityQuickSheet
         /// </summary>
         protected virtual string GetPropertyNameForField(MemberFieldData field)
         {
-            if (field.type == CellType.Enum)
-                return field.Name.ToUpper();
+            // if (field.type == CellType.Enum)
+            //     return field.Name.ToUpper();
 
             // To prevent an error can happen when the name of the column header has all lower case characters.
-            TextInfo ti = new CultureInfo("en-US", false).TextInfo;
-            return ti.ToTitleCase(field.Name);
+            //TextInfo ti = new CultureInfo("en-US", false).TextInfo;
+           // return ti.ToTitleCase(field.Name);
+
+            return field.Name;
         }
 
         /// <summary>

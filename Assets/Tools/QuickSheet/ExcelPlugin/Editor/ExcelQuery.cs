@@ -107,7 +107,9 @@ namespace UnityQuickSheet
         ///     The first row of a sheet is header column which is not the actual value
         ///     so it skips when it deserializes.
         /// </summary>
-        public List<T> Deserialize<T>(int start = 1)
+        //row1 =>type
+        //row2 =>name
+        public List<T> Deserialize<T>(int start = 2)
         {
             var t = typeof(T);
             PropertyInfo[] p = t.GetProperties();

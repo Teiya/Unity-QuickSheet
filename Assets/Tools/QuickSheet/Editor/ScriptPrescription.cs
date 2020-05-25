@@ -30,6 +30,8 @@ namespace UnityQuickSheet
         public string assetFilepath           = string.Empty; // should start with "Assets" not full path
         public string assetPostprocessorClass = string.Empty;
 
+        public string keyListStr              = string.Empty;
+
         public MemberFieldData[] memberFields;
 
         /// <summary>
@@ -99,6 +101,8 @@ namespace UnityQuickSheet
         }
 
         public bool IsArrayType { get; set; }
+
+        public bool IsKey { get; set; }
 
         public MemberFieldData()
         {

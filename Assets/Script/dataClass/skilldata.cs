@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// can be serialized onto an asset data file.
 /// 
 [System.Serializable]
-public class $ClassName : ScriptableObject 
+public class skilldata : ScriptableObject 
 {	
     [HideInInspector] [SerializeField] 
     public string SheetName = "";
@@ -22,7 +22,7 @@ public class $ClassName : ScriptableObject
     public string KeyListStr = "";
     
     // Note: initialize in OnEnable() not here.
-    public $DataClassName[] dataArray;
+    public skilldataData[] dataArray;
     
     void OnEnable()
     {		
@@ -35,7 +35,7 @@ public class $ClassName : ScriptableObject
         //    because OnEnable is called whenever Unity builds.
         // 		
         if (dataArray == null)
-            dataArray = new $DataClassName[0];
+            dataArray = new skilldataData[0];
 
     }
     

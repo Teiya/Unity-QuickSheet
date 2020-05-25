@@ -31,6 +31,8 @@ namespace UnityQuickSheet
                     machine.RuntimeClassPath = ExcelSettings.Instance.RuntimePath;
                 if (string.IsNullOrEmpty(ExcelSettings.Instance.EditorPath) == false)
                     machine.EditorClassPath = ExcelSettings.Instance.EditorPath;
+                if (string.IsNullOrEmpty(ExcelSettings.Instance.EditorDatabasePath) == false)
+                    machine.EditorDatabase = ExcelSettings.Instance.EditorDatabasePath;
             }
         }
 
@@ -154,6 +156,7 @@ namespace UnityQuickSheet
             machine.TemplatePath = EditorGUILayout.TextField("Template: ", machine.TemplatePath);
             machine.RuntimeClassPath = EditorGUILayout.TextField("Runtime: ", machine.RuntimeClassPath);
             machine.EditorClassPath = EditorGUILayout.TextField("Editor:", machine.EditorClassPath);
+            machine.EditorDatabase = EditorGUILayout.TextField("Database:", machine.EditorDatabase);
             //machine.DataFilePath = EditorGUILayout.TextField("Data:", machine.DataFilePath);
 
             machine.onlyCreateDataClass = EditorGUILayout.Toggle("Only DataClass", machine.onlyCreateDataClass);
@@ -170,6 +173,7 @@ namespace UnityQuickSheet
 
 	            Directory.CreateDirectory(Application.dataPath + Path.DirectorySeparatorChar + machine.RuntimeClassPath);
 	            Directory.CreateDirectory(Application.dataPath + Path.DirectorySeparatorChar + machine.EditorClassPath);
+                Directory.CreateDirectory(Application.dataPath + Path.DirectorySeparatorChar + machine.EditorDatabase);
 
                 ScriptPrescription sp = Generate(machine);
                 if (sp != null)
@@ -210,9 +214,12 @@ namespace UnityQuickSheet
                 return;
             }
 
-            int startRowIndex = 0;
+            int typeRowIndex = 0;
+            int startRowIndex = 1;
             string error = string.Empty;
-            var titles = new ExcelQuery(path, sheet).GetTitle(startRowIndex, ref error);
+            var eq = new ExcelQuery(path, sheet);
+            var titleTypes = eq.GetTitle(typeRowIndex, ref error);
+            var titles = eq.GetTitle(startRowIndex, ref error);
             if (titles == null || !string.IsNullOrEmpty(error))
             {
                 EditorUtility.DisplayDialog("Error", error, "OK");
@@ -233,6 +240,7 @@ namespace UnityQuickSheet
             }
 
             List<string> titleList = titles.ToList();
+            List<string> titleTypeList = titleTypes.ToList();
 
             if (machine.HasColumnHeader() && reimport == false)
             {
@@ -247,7 +255,7 @@ namespace UnityQuickSheet
                 // collect newly added or changed column headers
                 var changed = titleList.Select(t => GetColumnHeaderString(t))
                     .Where(e => headerDic.ContainsKey(e) == false)
-                    .Select(t => ParseColumnHeader(t, titleList.IndexOf(t)));
+                    .Select(t => ParseColumnHeader(t, titleTypeList[titleList.IndexOf(t)], titleList.IndexOf(t)));
 
                 // merge two list via LINQ
                 var merged = exist.Union(changed).OrderBy(x => x.OrderNO);
@@ -261,7 +269,7 @@ namespace UnityQuickSheet
                 if (titleList.Count > 0)
                 {
                     int order = 0;
-                    machine.ColumnHeaderList = titleList.Select(e => ParseColumnHeader(e, order++)).ToList();
+                    machine.ColumnHeaderList = titleList.Select(e => ParseColumnHeader(e, titleTypeList[titleList.IndexOf(e)], order++)).ToList();
                 }
                 else
                 {
@@ -289,9 +297,9 @@ namespace UnityQuickSheet
             sp.importedFilePath = machine.excelFilePath;
 
             // path where the .asset file will be created.
-            string path = Path.GetDirectoryName(machine.excelFilePath);
-            path += "/" + machine.WorkSheetName + ".asset";
-            sp.assetFilepath = path.Replace('\\', '/');
+            //string path = Path.GetDirectoryName("Assets/"+machine.EditorDatabase);
+            //path += "/" + machine.WorkSheetName + ".asset";
+            sp.assetFilepath = "Assets/" + machine.EditorDatabase + "/" + machine.WorkSheetName + ".asset";//path.Replace('\\', '/');
             sp.assetPostprocessorClass = machine.WorkSheetName + "AssetPostprocessor";
             sp.template = GetTemplate("PostProcessor");
 
