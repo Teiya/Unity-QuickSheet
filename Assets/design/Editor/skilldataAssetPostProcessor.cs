@@ -10,7 +10,7 @@ using UnityQuickSheet;
 public class skilldataAssetPostprocessor : AssetPostprocessor 
 {
     private static readonly string filePath = "Assets/design/skill.xlsx";
-    private static readonly string assetFilePath = "Assets/database/skilldata.asset";
+    private static readonly string assetFilePath = "Assets//skilldata.asset";
     private static readonly string sheetName = "skilldata";
     private static readonly string keyListStr = "id$hitLevel";
     
